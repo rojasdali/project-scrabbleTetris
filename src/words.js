@@ -1,14 +1,9 @@
 var Game = function(){
-  this.letter = {}
+  this.letter = [];
   this.startGame;
   
 }
-
-
-
-
 window.onload = function(){
-// var currentGame;
 
 // var word = prompt("enter word", "word");
 // if (ScrabbleWordList.indexOf(word) > -1) {
@@ -67,7 +62,7 @@ function getSevenLetters(arr){
 
 function getOtherLetters(arr,mySevenLetters){
   myAlphabet = [];
-  var tenTimes = 10;
+  var tenTimes = 19;
   while(tenTimes){
     var randInt = Math.floor(Math.random() * arr.length)
     if (arr[randInt].indexOf(mySevenLetters) === -1){
@@ -109,64 +104,156 @@ var myScrambledLetters = scrambleAllLetters(myTotalLetters);
 
 
 
-var Letter = function(){
-  this.x = 0;     
-  this.y = 0;     
+function Letter(){
+  this.x = 0;
+  this.y = 0;        
   this.width = 50;  
   this.height = 50;
-  this.img = ''
+  this.img = '';
+  this.keyCode = 0;
 }
 
-var myCanvas = document.getElementById('rightCanvas');
-var ctx = myCanvas.getContext('2d');
+var rightCanvas = document.getElementById('rightCanvas');
+var ctx = rightCanvas.getContext('2d');
+var theCanvas = document.getElementById('theCanvas');
+var ctx2 = theCanvas.getContext('2d');
+
+
 document.getElementById("start-button").onclick = function (){
   startGame();
 };
 
 
 
-  Letter.prototype.drawLetter = function(){
+  Letter.prototype.drawLetter = function(canvas){
+  //ctx2.clearRect(this.x, this.y, this.width, this.height)
   var theImage = new Image();
   theImage.src = this.img;
-  
-    // console.log("currentGame.letter.img: ", currentGame.letter.img);
-    // console.log("the image is: ", theImage)
-
       var that = this;
-
-    theImage.onload = function(){
-      console.log("this is onload function");
-      ctx.drawImage(theImage, that.x, that.y, that.width, that.height);
-      console.log("this.y  up is in onload image: ",that.y);
+      theImage.onload = function(){
+      canvas.drawImage(theImage, that.x, that.y, that.width, that.height);
     }
   
 }
-Game.prototype.getTheLetter = function(){
-  for(i = 0; i < mySevenLetters.length; i++){
-    // console.log("y  down is:", currentGame.letter.y);
-
-    // setTimeout(function(){
-      // console.log("inside timeout: ", currentGame.letter.y)
-      this.letter.img = 'images/'+mySevenLetters[i]+'.png';
-      //currentGame.letter.x += 50;
-      this.letter.y += 50;
-    // })
-    
-    this.letter.drawLetter();
-    console.log("im after draw letter call")
-    // console.log(currentGame.letter.img);
+Game.prototype.myRandomSeven = function(arr){
+  letterArmy = [];
+  for(var i = 0; i < arr.length; i++){
+    letterArmy.push(new Letter())
   }
+  return letterArmy
 }
 
+Game.prototype.myRandomSeventeen = function(arr){
+  letterArmy = [];
+  for(var i = 0; i < arr.length; i++){
+    letterArmy.push(new Letter())
+  }
+  return letterArmy
+}
+
+
+Game.prototype.fixedLetterPosition = function(letterArmy){
+  counter = 0;
+  for (var i = 0; i < letterArmy.length; i++){
+    letterArmy[i].img = 'images/'+mySevenLetters[i]+'.png';
+    letterArmy[i].y += counter;
+    letterArmy[i].keyCode = mySevenLetters[i].charCodeAt()
+    letterArmy[i].drawLetter(ctx);
+    counter += 50;
+ }
+
+
+}
+
+// Game.prototype.randomFall = function(letterArmy){
+//   randArr = [];
+//   newArmy = [];
+
+//     for (var i = 0; i < letterArmy.length; i++){
+//     newArmy.push(Object.assign(letterArmy[i]))
+//     }
+  
+//     return newArmy;
+// }
+
+Game.prototype.fallLetterPosition = function(arr){
+  for(var i = 0; i < arr.length; i++){
+    arr[i].img = 'images/'+myScrambledLetters[i]+'.png';
+    arr[i].width = 40;
+    arr[i].height = 40;
+    arr[i].keyCode = myScrambledLetters[i].charCodeAt()
+  }
+  newArmy = [];
+  for (var i = 0, j = arr.length; i < j; i++){
+    var randInt = Math.floor(Math.random() * arr.length)
+    arr[randInt].x = Math.floor(Math.random() * 550);
+    //newArmy[randInt].drawLetter(ctx2);
+    newArmy.push(arr[randInt]);
+    arr.splice(randInt,1);
+
+  }
+  return newArmy
+  
+}
+
+
+
+Game.prototype.drawFallingLetters = function(arr){
+  //console.log("arr is: ", arr);
+  var i = 0;
+  var id = setInterval(function(){
+    //console.log(arr.length);
+    if(i <= arr.length){
+      arr[i].drawLetter(ctx2);
+      arr[i].fall();
+     //console.log(i);
+      i++;
+    }else{
+      clearInterval(id);
+    }
+    },1200)
+  }
+
+  Letter.prototype.fall = function(){
+    var that = this;
+    var id = setInterval(function(){
+    //console.log("this.y in fall function: ", that.y)
+      
+      if(that.y <= 500){
+       // console.log("heyyyy")
+        ctx2.clearRect(that.x, that.y, that.width, that.height)
+        that.y +=80;  
+        that.drawLetter(ctx2)
+      }else{
+        clearInterval(id);
+      }
+      },1200)
+  }
+
+
+
+Game.prototype.addLetters = function (letter){
+  this.letter.push(letter)
+}
 
 function startGame(){
   var currentGame = new Game();
-  var theLetter = new Letter();
-  currentGame.letter = theLetter;
-  currentGame.getTheLetter();
-  
-  
-}
+  var fallingLetters;
+  var letterArmy = currentGame.myRandomSeven(mySevenLetters);
+  currentGame.fixedLetterPosition(letterArmy);
+  var scrambledArmy = currentGame.myRandomSeventeen(myScrambledLetters);
+  //newArmy = currentGame.randomFall(letterArmy);
+  for(i=0;i<scrambledArmy.length;i++){
+    //console.log(scrambledArmy[i]);
+    currentGame.addLetters(scrambledArmy[i]);
+  }
+
+  fallingLetters = currentGame.fallLetterPosition(currentGame.letter);
+  currentGame.drawFallingLetters(fallingLetters);
+  //console.log(fallingLetters);
+  console.log(currentGame);
+
+ }
 
 
 
