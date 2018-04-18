@@ -24,13 +24,11 @@ Letter.prototype.fall = function(){
       },1200)
   }
 
-//   Letter.prototype.drawLetter = function(canvas){
-//   //ctx2.clearRect(this.x, this.y, this.width, this.height)
-//   var theImage = new Image();
-//   theImage.src = this.img;
-//       var that = this;
-//       theImage.onload = function(){
-//       canvas.drawImage(theImage, that.x, that.y, that.width, that.height);
-//     }
-  
-// }
+  Letter.prototype.drawLetter = function(canvas){
+    var theImage = new Image();
+    theImage.src = this.img;
+        var that = this;
+        theImage.onload = function(){
+        canvas.drawImage(theImage, that.x, that.y, that.width, that.height);
+      }
+  }
