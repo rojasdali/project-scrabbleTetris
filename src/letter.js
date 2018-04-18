@@ -1,8 +1,5 @@
 var Letter = function(){
-    this.id = 0;
     this.name = '';
-    this.x = 0;
-    this.y = 0;
     this.img = '';
     this.keyCode = 0;
     this.points = 0;
@@ -11,6 +8,21 @@ var Letter = function(){
     this.points = 0;
     
 }
+
+var theCanvas = document.getElementById('theCanvas');
+var ctx2 = theCanvas.getContext('2d');
+Letter.prototype.fall = function(){
+    var that = this;
+    var id = setInterval(function(){     
+      if(that.y <= 500){
+        ctx2.clearRect(that.x, that.y, that.width, that.height)
+        that.y +=80;  
+        that.drawLetter(ctx2)
+      }else{
+        clearInterval(id);
+      }
+      },1200)
+  }
 
 //   Letter.prototype.drawLetter = function(canvas){
 //   //ctx2.clearRect(this.x, this.y, this.width, this.height)

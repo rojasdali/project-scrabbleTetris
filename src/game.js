@@ -37,14 +37,32 @@ Game.prototype.addLetterAlpha = function(letter){
       this.alphabet.push(letter)
 }
 
-Game.prototype.addLetterSide = function(){
+Game.prototype.drawFallingLetters = function(arr){
+    //console.log("arr is: ", arr);
+    var i = 0;
+    var id = setInterval(function(){
+      //console.log(arr.length);
+      if(i <= arr.length){
+        arr[i].drawLetter(ctx2);
+        arr[i].fall();
+       //console.log(i);
+        i++;
+      }else{
+        clearInterval(id);
+      }
+      },1200)
+    }
+  
+
+Game.prototype.addLetterSide = function(letter){
     scrabbleBoard = this.scrabble;
     randNum = Math.floor(Math.random() * scrabbleBoard.length);
     scrabbleLetter = scrabbleBoard[randNum];
-    var count = 0;
     for(var j = 0; j < this.alphabet.length; j++){
         if(scrabbleLetter === this.alphabet[j].name){
-        this.myLetters.push(this.alphabet[j]);
+            letter = new Letter();
+            Object.assign(letter,this.alphabet[j]);
+            this.myLetters.push(letter);
         }
     }
 }
@@ -53,7 +71,9 @@ Game.prototype.addLetterFalling = function(){
     alphabetBoard = this.alphabet;
     rand = Math.floor(Math.random()* alphabetBoard.length);
     fallingLetter = alphabetBoard[rand];
-    this.fallingLetters.push(fallingLetter);
+    letter = new Letter();
+    Object.assign(letter,fallingLetter)
+    this.fallingLetters.push(letter);
 }
 
 
