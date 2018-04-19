@@ -11,8 +11,14 @@ var Letter = function(){
 
 var theCanvas = document.getElementById('theCanvas');
 var ctx2 = theCanvas.getContext('2d');
+var rightCanvas = document.getElementById('rightCanvas');
+var ctx = rightCanvas.getContext('2d');
+var leftCanvas = document.getElementById('leftCanvas');
+var ctx3 = leftCanvas.getContext('2d');
+// fall animations on letters
 Letter.prototype.fall = function(){
     var that = this;
+    that.y = 1
     var id = setInterval(function(){     
       if(that.y <= 500){
         ctx2.clearRect(that.x, that.y, that.width, that.height)
@@ -23,7 +29,7 @@ Letter.prototype.fall = function(){
       }
       },1200)
   }
-
+// paint the letter
   Letter.prototype.drawLetter = function(canvas){
     var theImage = new Image();
     theImage.src = this.img;
@@ -31,4 +37,9 @@ Letter.prototype.fall = function(){
         theImage.onload = function(){
         canvas.drawImage(theImage, that.x, that.y, that.width, that.height);
       }
+  }
+
+  Letter.prototype.clearLetter = function(canvas){
+        canvas.clearRect(this.x, this.y, this.width, this.height)
+ 
   }

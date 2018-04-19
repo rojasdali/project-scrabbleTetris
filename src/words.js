@@ -97,6 +97,18 @@ function fixedLetterPosition(letter, pos){
     return cloned
  }
 
+
+ function addedFallingX(letter){
+    letter.height = 40;
+    letter.width = 40;
+    letter.x = randX();
+  }
+ 
+  function addedLetterY(letter,pos){
+    letter.y = pos;
+  }
+// array to store the keys of my letters
+ var fallingLnames = [];
  // start game 
 function startGame(){
 var currentGame = new Game()
@@ -119,7 +131,7 @@ for(var i=0; i < 7; i++){
 }
 
 // add letters to falling
-for(var z=0; z < 19; z++){
+for(var z=0; z < 26; z++){
   currentGame.addLetterFalling();
 }
 
@@ -137,26 +149,94 @@ for(var v = 0; v < currentGame.myLetters.length; v++){
 currentGame.myLetters[v].drawLetter(ctx);
 }
 
-var fallingL = currentGame.fallingLetters;
+
+
 // clone my fixed letters to be pushed into fallingLetters
 cloned = clone(fixedLetters);
 // join fixedLetters to fallingLetters
-fallingL = joinArrays(cloned,fallingL)
+currentGame.fallingLetters = joinArrays(cloned,currentGame.fallingLetters);
+
 // shuffle the falling letters array
-fallingL = scrambleAllLetters(fallingL);
-for(var m = 0; m < fallingL.length; m++){
-  fallingL[m].height = 40;
-  fallingL[m].width = 40;
-  fallingL[m].x = randX();
+currentGame.fallingLetters = scrambleAllLetters(currentGame.fallingLetters);
+for(var m = 0; m < currentGame.fallingLetters.length; m++){
+  currentGame.fallingLetters[m].height = 40;
+  currentGame.fallingLetters[m].width = 40;
+  currentGame.fallingLetters[m].x = randX();
 }
 // draw the falling letters
-currentGame.drawFallingLetters(fallingL)
+currentGame.drawFallingLetters(currentGame.fallingLetters)
 
-}//start game
+// keypress events
+document.onkeydown = function(event){
+  if(event.keyCode >= 65 && event.keyCode <= 90){
+  var key = String.fromCharCode(event.keyCode);
+      key = key.toLowerCase();
+  var resultFalling = currentGame.fallingLetters.filter(letter => letter.name === key && letter.y <= 500 && letter.y >0)
+  
+  if(resultFalling.length > 0){
+  var resultSide = currentGame.myLetters.filter(letter => letter.name === resultFalling[0].name)
+  var sideLetter = currentGame.myLetters.indexOf(resultSide[0]);
+  }
+
+  var theCorrectLetter = currentGame.fallingLetters.indexOf(resultFalling[0]);
+  var letterToClear = currentGame.fallingLetters[theCorrectLetter];
+
+  var sideLetterToClear = currentGame.myLetters[sideLetter];
+ 
+  
+  // if(sideLetterToClear){
+    
+    //resultSide.splice(0,1);
+    //resultFalling.splice(0,1)
+    //currentGame.myLetters.splice(sideLetterToClear,1);
+  // }
+  var tmpY;
+    if(letterToClear && sideLetterToClear){
+    while(letterToClear.y < 500){
+      letterToClear.clearLetter(ctx2);
+      letterToClear.y+=80;
+  }
+    sideLetterToClear.clearLetter(ctx);
+    tmpY = currentGame.myLetters[sideLetter].y;
+    bottomletter = new Letter();
+    Object.assign(bottomletter,currentGame.myLetters[sideLetter])
+   currentGame.fallingLetters.splice(theCorrectLetter,1);
+   currentGame.myLetters.splice(sideLetter,1)
+   console.log(bottomletter) 
+   bottomletter.drawLetter(ctx3)
+}
+
+   
+  
+   //console.log("falling",currentGame.fallingLetters)
+    //console.log(currentGame.fallingLetters)
+    //console.log(currentGame.fallingLetters[-1])
+    currentGame.addLetterFalling();
+    currentGame.addLetterSide();
+    //console.log(currentGame.myLetters);
+    addedFallingX(currentGame.fallingLetters[25]);
+    addedLetterY(currentGame.myLetters[6],tmpY)
+    currentGame.myLetters[6].drawLetter(ctx);
+    
+
+    var haventFallen = currentGame.fallingLetters.filter(letter => letter.y < 50);
+    currentGame.fallingLetters = haventFallen;
+    if(currentGame.fallingLetters.length % 20 === 0){
+      //console.log("%20")
+    currentGame.drawFallingLetters(currentGame.fallingLetters);
+    }
+}  
+  }
+  
+//console.log(currentGame.fallingLetters)
+
+}//end of start game
 
 document.getElementById("start-button").onclick = function (){
   startGame();
 };
+
+
 
 
 

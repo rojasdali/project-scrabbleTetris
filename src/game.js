@@ -32,28 +32,32 @@ var Game = function(){
     this.alphabet = [];
     
 }
-
+// add the whole alphabet to an array as Letter objects 
 Game.prototype.addLetterAlpha = function(letter){
       this.alphabet.push(letter)
 }
-
+// draw the falling letters
 Game.prototype.drawFallingLetters = function(arr){
     //console.log("arr is: ", arr);
     var i = 0;
     var id = setInterval(function(){
       //console.log(arr.length);
       if(i <= arr.length){
+       //console.log("arr:", arr)
         arr[i].drawLetter(ctx2);
         arr[i].fall();
        //console.log(i);
         i++;
+        if (i > 25){
+            i--;
+        }
       }else{
         clearInterval(id);
       }
       },1200)
     }
   
-
+// add letters to the side
 Game.prototype.addLetterSide = function(letter){
     scrabbleBoard = this.scrabble;
     randNum = Math.floor(Math.random() * scrabbleBoard.length);
