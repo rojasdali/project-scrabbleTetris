@@ -169,6 +169,7 @@ function getSum(word) {
  var fallingLnames = [];
  // start game 
 function startGame(){
+  document.getElementById("start-button").disabled = true;
   score(0);
   drawTime(board.timer);
   drawWordCount(board.wordCount);
