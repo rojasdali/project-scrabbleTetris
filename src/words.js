@@ -1,5 +1,7 @@
+var leftCanvas = document.getElementById('leftCanvas');
+var ctx4 = leftCanvas.getContext('2d');
   window.onload = function(){
-
+    
 // // var word = prompt("enter word", "word");
 // // if (ScrabbleWordList.indexOf(word) > -1) {
 // //   console.log("found");
@@ -35,6 +37,7 @@ var points = {
     'y': 4,
     'z': 10
 }
+
 
 var word = [];
 // function to shuffle my falling letters array. this is needed because i am pushing in my fixed letters into it
@@ -99,20 +102,40 @@ function fixedLetterPosition(letter, pos){
     return cloned
  }
 
- function score(pts) {
-  ctx.fillText('Score: ' + pts, 315/2, 500/2);
-  this.ctx.fillStyle = 'white';
-  this.ctx.font = '50px Sans Serif';
+ function score(pt) {
+  this.ctx4.clearRect(0,0,300,500);
+  this.ctx4.fillStyle = 'white';
+  this.ctx4.font = '30px Helvetica';
+  this.ctx4.fillText('Score: '+ pt ,30, 250);
+  
 }
- function gameOverNotaWord() {
-  setTimeout(function() {
-    alert('That was not a word, you lose! ');
-  }, 10);
-  location.reload(true);
+function drawWordCount(wc){
+  this.ctx4.clearRect(0,100,300,51);
+  this.ctx4.fillStyle = 'white';
+  this.ctx4.font = '30px Helvetica';
+  this.ctx4.fillText('Word Count: '+ wc ,30, 100);
 }
-function gameOverPoints() {
+function drawTime(time){
+  this.ctx4.clearRect(30,270,300,500);
+  this.ctx4.fillStyle = 'white';
+  this.ctx4.font = '30px Helvetica';
+  this.ctx4.fillText('Time left: '+ time ,30, 320);
+}
+
+var board = {
+  timer:60,
+  wordCount: 0,
+  score: 0
+}
+
+
+function gameOverPoints(total) {
   setTimeout(function() {
+    if(total <=5 ){
     alert('You did not get enough points, you lose!');
+    }else{
+      alert('YAY!! YOU WIN!!! You got 5 or more points!')
+    }
   }, 10);
   location.reload(true);
 }
@@ -133,11 +156,31 @@ function getSum(word) {
   function addedLetterY(letter,pos){
     letter.y = pos;
   }
+
+  
 // array to store the keys of my letters
  var fallingLnames = [];
  // start game 
 function startGame(){
-score(0);
+  score(0);
+  drawTime(board.timer);
+  board.timer--;
+  var countdown = setInterval(function(){
+    drawTime(board.timer);
+    board.timer--
+    if (board.timer === 0) {
+      drawTime(board.timer);
+      gameOverPoints(board.score)
+      clearInterval(countdown);
+    }
+  }, 1000);
+   function gameOverNotaWord() {
+    setTimeout(function() {
+      alert('That was not a word, you lose! ');
+    }, 10);
+    location.reload(true);
+  }
+
 var currentGame = new Game()
 for(var i=0; i < currentGame.abc.length; i++){
   letter = new Letter();
@@ -265,15 +308,18 @@ document.onkeydown = function(event){
 
 if(event.keyCode === 13){
   myWord = '';
-  console.log(word);
+  //console.log(word);
   for(var i = 0; i < word.length; i++){
           myWord += word[i].name;
   }
       if (ScrabbleWordList.indexOf(myWord) > -1) {
-        total += getSum(word)
+        total += getSum(word);
+        board.score = total;
         score(total);
         bx = 0;
-        console.log(total);
+        board.wordCount++;
+        drawWordCount(board.wordCount);
+        //console.log(total);
         for(var i = 0; i < word.length; i++){
           word[i].clearLetter(ctx3);
   }

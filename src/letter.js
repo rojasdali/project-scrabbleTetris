@@ -13,8 +13,6 @@ var theCanvas = document.getElementById('theCanvas');
 var ctx2 = theCanvas.getContext('2d');
 var rightCanvas = document.getElementById('rightCanvas');
 var ctx = rightCanvas.getContext('2d');
-var leftCanvas = document.getElementById('leftCanvas');
-var ctx4 = leftCanvas.getContext('2d');
 var bottomCanvas = document.getElementById('bottomCanvas')
 var ctx3 = bottomCanvas.getContext('2d');
 // fall animations on letters
