@@ -1,3 +1,4 @@
+
 var Game = function(){
     this.abc = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
     
@@ -48,9 +49,9 @@ Game.prototype.drawFallingLetters = function(arr){
         arr[i].fall();
        //console.log(i);
         i++;
-        if (i > 25){
-            i--;
-        }
+        // if (i > 25){
+        //     i--;
+        // }
       }else{
         clearInterval(id);
       }

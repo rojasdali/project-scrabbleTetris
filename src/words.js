@@ -35,6 +35,8 @@ var points = {
     'y': 4,
     'z': 10
 }
+
+var word = [];
 // function to shuffle my falling letters array. this is needed because i am pushing in my fixed letters into it
 function scrambleAllLetters(arr){
   var m = arr.length, t, i;
@@ -97,6 +99,23 @@ function fixedLetterPosition(letter, pos){
     return cloned
  }
 
+ function score(pts) {
+  ctx.fillText('Score: ' + pts, 315/2, 500/2);
+  this.ctx.fillStyle = 'white';
+  this.ctx.font = '50px Sans Serif';
+}
+ function gameOverNotaWord() {
+  setTimeout(function() {
+    alert('That was not a word, you lose! ');
+  }, 10);
+  location.reload(true);
+}
+function gameOverPoints() {
+  setTimeout(function() {
+    alert('You did not get enough points, you lose!');
+  }, 10);
+  location.reload(true);
+}
 
  function addedFallingX(letter){
     letter.height = 40;
@@ -104,6 +123,13 @@ function fixedLetterPosition(letter, pos){
     letter.x = randX();
   }
  
+function getSum(word) {
+   var total = 0;
+    for(var i = 0; i < word.length; i++){
+        total += word[i].points;
+    }
+  return total;
+}
   function addedLetterY(letter,pos){
     letter.y = pos;
   }
@@ -111,6 +137,7 @@ function fixedLetterPosition(letter, pos){
  var fallingLnames = [];
  // start game 
 function startGame(){
+score(0);
 var currentGame = new Game()
 for(var i=0; i < currentGame.abc.length; i++){
   letter = new Letter();
@@ -126,12 +153,12 @@ for(var i=0; i < currentGame.abc.length; i++){
 }
 
 // add letters to the side
-for(var i=0; i < 7; i++){
+for(var i=0; i < 10; i++){
     currentGame.addLetterSide();
 }
 
 // add letters to falling
-for(var z=0; z < 26; z++){
+for(var z=0; z < 500; z++){
   currentGame.addLetterFalling();
 }
 
@@ -167,7 +194,11 @@ for(var m = 0; m < currentGame.fallingLetters.length; m++){
 currentGame.drawFallingLetters(currentGame.fallingLetters)
 
 // keypress events
+var bx = 0;
+var total = 0;
+//*************************************** */
 document.onkeydown = function(event){
+  //console.log(event.keyCode);
   if(event.keyCode >= 65 && event.keyCode <= 90){
   var key = String.fromCharCode(event.keyCode);
       key = key.toLowerCase();
@@ -190,11 +221,12 @@ document.onkeydown = function(event){
     //resultFalling.splice(0,1)
     //currentGame.myLetters.splice(sideLetterToClear,1);
   // }
+
   var tmpY;
     if(letterToClear && sideLetterToClear){
     while(letterToClear.y < 500){
       letterToClear.clearLetter(ctx2);
-      letterToClear.y+=80;
+      letterToClear.y+=52;
   }
     sideLetterToClear.clearLetter(ctx);
     tmpY = currentGame.myLetters[sideLetter].y;
@@ -202,8 +234,12 @@ document.onkeydown = function(event){
     Object.assign(bottomletter,currentGame.myLetters[sideLetter])
    currentGame.fallingLetters.splice(theCorrectLetter,1);
    currentGame.myLetters.splice(sideLetter,1)
-   console.log(bottomletter) 
+   //console.log(bottomletter) 
+   bottomletter.x = bx;
+   bottomletter.y = 0;
    bottomletter.drawLetter(ctx3)
+   word.push(bottomletter);
+   bx += 50;
 }
 
    
@@ -211,21 +247,46 @@ document.onkeydown = function(event){
    //console.log("falling",currentGame.fallingLetters)
     //console.log(currentGame.fallingLetters)
     //console.log(currentGame.fallingLetters[-1])
-    currentGame.addLetterFalling();
+    //currentGame.addLetterFalling();
     currentGame.addLetterSide();
     //console.log(currentGame.myLetters);
-    addedFallingX(currentGame.fallingLetters[25]);
-    addedLetterY(currentGame.myLetters[6],tmpY)
-    currentGame.myLetters[6].drawLetter(ctx);
-    
+    //addedFallingX(currentGame.fallingLetters[25]);
+    addedLetterY(currentGame.myLetters[9],tmpY)
+    currentGame.myLetters[9].drawLetter(ctx);
+   
 
-    var haventFallen = currentGame.fallingLetters.filter(letter => letter.y < 50);
-    currentGame.fallingLetters = haventFallen;
-    if(currentGame.fallingLetters.length % 20 === 0){
-      //console.log("%20")
-    currentGame.drawFallingLetters(currentGame.fallingLetters);
-    }
+    // var haventFallen = currentGame.fallingLetters.filter(letter => letter.y < 50);
+    // currentGame.fallingLetters = haventFallen;
+    // if(currentGame.fallingLetters.length % 20 === 0){
+    //   //console.log("%20")
+    // currentGame.drawFallingLetters(currentGame.fallingLetters);
+    // }
 }  
+
+if(event.keyCode === 13){
+  myWord = '';
+  console.log(word);
+  for(var i = 0; i < word.length; i++){
+          myWord += word[i].name;
+  }
+      if (ScrabbleWordList.indexOf(myWord) > -1) {
+        total += getSum(word)
+        score(total);
+        bx = 0;
+        console.log(total);
+        for(var i = 0; i < word.length; i++){
+          word[i].clearLetter(ctx3);
+  }
+  word =[];
+           
+}     else {
+        gameOverNotaWord();
+            
+}
+}
+
+
+
   }
   
 //console.log(currentGame.fallingLetters)

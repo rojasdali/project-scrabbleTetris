@@ -14,7 +14,9 @@ var ctx2 = theCanvas.getContext('2d');
 var rightCanvas = document.getElementById('rightCanvas');
 var ctx = rightCanvas.getContext('2d');
 var leftCanvas = document.getElementById('leftCanvas');
-var ctx3 = leftCanvas.getContext('2d');
+var ctx4 = leftCanvas.getContext('2d');
+var bottomCanvas = document.getElementById('bottomCanvas')
+var ctx3 = bottomCanvas.getContext('2d');
 // fall animations on letters
 Letter.prototype.fall = function(){
     var that = this;
@@ -22,7 +24,7 @@ Letter.prototype.fall = function(){
     var id = setInterval(function(){     
       if(that.y <= 500){
         ctx2.clearRect(that.x, that.y, that.width, that.height)
-        that.y +=80;  
+        that.y +=52;  
         that.drawLetter(ctx2)
       }else{
         clearInterval(id);
