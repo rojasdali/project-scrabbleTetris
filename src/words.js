@@ -8,6 +8,8 @@ var ctx4 = leftCanvas.getContext('2d');
 // // } else {
 // //   console.log("not found");
 // // }
+var audio = new Audio('./music/correctword.mp3');
+var audio2 = new Audio('./music/wrongword.mp3')
 
 var points = {
     'a': 1,
@@ -328,12 +330,14 @@ if(event.keyCode === 13 && word.length > 0){
         score(total);
         board.wordCount++;
         drawWordCount(board.wordCount);
+        audio.play();
         //console.log(total);
        
            
 }     else {
         board.notWord++;
         drawNot(board.notWord);
+        audio2.play();
         if(board.notWord === 2){
         gameOverNotaWord();
         }
