@@ -138,7 +138,7 @@ var board = {
 
 function gameOverPoints(total) {
   setTimeout(function() {
-    if(total <=5 ){
+    if(total <= 50 ){
     alert('You did not get enough points, you lose!');
     }else{
       alert('YAY!! YOU WIN!!! You got 5 or more points!')
@@ -206,7 +206,7 @@ for(var i=0; i < currentGame.abc.length; i++){
 }
 
 // add letters to the side
-for(var i=0; i < 10; i++){
+for(var i=0; i < 20000; i++){
     currentGame.addLetterSide();
 }
 
@@ -225,9 +225,9 @@ for(var l = 0; l < fixedLetters.length; l++){
 }
 
 // draw my fixed letters on the screen
-for(var v = 0; v < currentGame.myLetters.length; v++){
-currentGame.myLetters[v].drawLetter(ctx);
-}
+// for(var v = 0; v < currentGame.myLetters.length; v++){
+// currentGame.myLetters[v].drawLetter(ctx);
+// }
 
 
 
@@ -305,7 +305,7 @@ document.onkeydown = function(event){
     //console.log(currentGame.myLetters);
     //addedFallingX(currentGame.fallingLetters[25]);
     addedLetterY(currentGame.myLetters[9],tmpY)
-    currentGame.myLetters[9].drawLetter(ctx);
+    //currentGame.myLetters[9].drawLetter(ctx);
    
 
     // var haventFallen = currentGame.fallingLetters.filter(letter => letter.y < 50);
@@ -334,7 +334,7 @@ if(event.keyCode === 13 && word.length > 0){
 }     else {
         board.notWord++;
         drawNot(board.notWord);
-        if(board.notWord === 3){
+        if(board.notWord === 2){
         gameOverNotaWord();
         }
         
