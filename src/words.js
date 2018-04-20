@@ -143,7 +143,7 @@ function gameOverPoints(total) {
     if(total <= 50 ){
     alert('You did not get enough points, you lose!');
     }else{
-      alert('YAY!! YOU WIN!!! You got 5 or more points!')
+      alert('YAY!! YOU WIN!!! You got 50 or more points!')
     }
   }, 10);
   location.reload(true);
