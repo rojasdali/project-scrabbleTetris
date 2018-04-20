@@ -318,7 +318,7 @@ document.onkeydown = function(event){
     // }
 }  
 
-if(event.keyCode === 13 && word.length > 0){
+if(event.keyCode === 13 && word.length > 2){
   myWord = '';
   //console.log(word);
   for(var i = 0; i < word.length; i++){
