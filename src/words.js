@@ -103,20 +103,26 @@ function fixedLetterPosition(letter, pos){
  }
 
  function score(pt) {
-  this.ctx4.clearRect(0,0,300,500);
+  this.ctx4.clearRect(29,220,250,50);
   this.ctx4.fillStyle = 'white';
   this.ctx4.font = '30px Helvetica';
   this.ctx4.fillText('Score: '+ pt ,30, 250);
   
 }
 function drawWordCount(wc){
-  this.ctx4.clearRect(0,100,300,51);
+  this.ctx4.clearRect(29,70,250,50);
   this.ctx4.fillStyle = 'white';
   this.ctx4.font = '30px Helvetica';
   this.ctx4.fillText('Word Count: '+ wc ,30, 100);
 }
+function drawNot(wc){
+  this.ctx4.clearRect(29,140,250,50);
+  this.ctx4.fillStyle = 'white';
+  this.ctx4.font = '30px Helvetica';
+  this.ctx4.fillText('Wrong words: '+ wc ,30, 170);
+}
 function drawTime(time){
-  this.ctx4.clearRect(30,270,300,500);
+  this.ctx4.clearRect(29,290,300,50);
   this.ctx4.fillStyle = 'white';
   this.ctx4.font = '30px Helvetica';
   this.ctx4.fillText('Time left: '+ time ,30, 320);
@@ -125,6 +131,7 @@ function drawTime(time){
 var board = {
   timer:60,
   wordCount: 0,
+  notWord: 0,
   score: 0
 }
 
@@ -164,6 +171,8 @@ function getSum(word) {
 function startGame(){
   score(0);
   drawTime(board.timer);
+  drawWordCount(board.wordCount);
+  drawNot(board.notWord);
   board.timer--;
   var countdown = setInterval(function(){
     drawTime(board.timer);
@@ -306,7 +315,7 @@ document.onkeydown = function(event){
     // }
 }  
 
-if(event.keyCode === 13){
+if(event.keyCode === 13 && word.length > 0){
   myWord = '';
   //console.log(word);
   for(var i = 0; i < word.length; i++){
@@ -316,19 +325,26 @@ if(event.keyCode === 13){
         total += getSum(word);
         board.score = total;
         score(total);
-        bx = 0;
         board.wordCount++;
         drawWordCount(board.wordCount);
         //console.log(total);
-        for(var i = 0; i < word.length; i++){
-          word[i].clearLetter(ctx3);
-  }
-  word =[];
+       
            
 }     else {
+        board.notWord++;
+        drawNot(board.notWord);
+        if(board.notWord === 3){
         gameOverNotaWord();
+        }
+        
+  }
+  
+  for(var i = 0; i < word.length; i++){
+    word[i].clearLetter(ctx3);
             
 }
+bx = 0;
+word =[];
 }
 
 
