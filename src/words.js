@@ -8,8 +8,8 @@ var ctx4 = leftCanvas.getContext('2d');
 // // } else {
 // //   console.log("not found");
 // // }
-var audio = new Audio('./music/correctword.mp3');
-var audio2 = new Audio('./music/wrongword.mp3')
+var audio = new Audio('./music/correctword.wav');
+var audio2 = new Audio('./music/wrongword.wav')
 
 var points = {
     'a': 1,
